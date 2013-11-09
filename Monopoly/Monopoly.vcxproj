@@ -14,7 +14,7 @@
     <ProjectGuid>{AA6EF707-96D0-44CB-8EF3-19DC00DF05DC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Monopoly</RootNamespace>
-    <ProjectName>Monopoly</ProjectName>
+    <ProjectName>MonopolyUI</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,7 +71,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(QTDIR)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>copy "QTLLs\QTCore4.dll" "$(SolutionDir)$(Configuration)\"</Command>

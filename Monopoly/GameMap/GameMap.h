@@ -10,7 +10,8 @@ public:
 	GameMap(int p_size, int p_numberOfPlaces);
 	~GameMap();
 
-	std::vector<Place> getPlaces();
+	std::vector<Place>& getPlaces();
+	int getSize();
 
 private:
 	int m_size;

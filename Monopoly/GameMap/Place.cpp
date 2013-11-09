@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "Place.h"
 
+int Place::ms_latestSelectionNumber = 0;
+
 Place::Place(std::string p_name, std::string p_city, int p_width, int p_height) :
 	m_name(p_name),
 	m_city(p_city),
 	m_width(p_width),
-	m_height(p_height)
+	m_height(p_height),
+	m_isSelected(false),
+	m_selectionNumber(++ms_latestSelectionNumber)
 {
 }
 
@@ -70,4 +74,24 @@ int Place::getHeight()
 int Place::getWidth()
 {
 	return m_width;
+}
+
+int Place::getSelectionNumber()
+{
+	return m_selectionNumber;
+}
+
+void Place::setSelected(int p_selectionNumber)
+{
+	if(p_selectionNumber == m_selectionNumber) {
+		m_isSelected = true;
+	}
+	else {
+		m_isSelected = false;
+	}
+}
+
+bool Place::isSelected()
+{
+	return m_isSelected;
 }

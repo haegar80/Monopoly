@@ -31,6 +31,11 @@ public:
 	int getHeight();
 	int getWidth();
 
+	int getSelectionNumber();
+
+	void setSelected(int p_selectionNumber);
+	bool isSelected();
+
 private:
 	std::string m_name;
 	std::string m_city;
@@ -40,6 +45,10 @@ private:
 	int m_positionY;
 	Color m_color;
 	int m_price;
+	int m_selectionNumber;
+	bool m_isSelected;
+
+	static int ms_latestSelectionNumber;
 };
 
 #endif // Place_H

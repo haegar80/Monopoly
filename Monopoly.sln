@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Monopoly", "Monopoly\Monopoly.vcxproj", "{AA6EF707-96D0-44CB-8EF3-19DC00DF05DC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineClient", "GameEngineClient\GameEngineClient.vcxproj", "{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MonopolyManagedWrapper", "MonopolyManagedWrapper\MonopolyManagedWrapper.vcxproj", "{68A801CE-4E70-410C-9E9A-13C2AC9737FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonopolyGameEngine", "MonopolyGameEngine\MonopolyGameEngine.csproj", "{409FE135-BE0F-4387-B1CC-7499BBD1421A}"
@@ -29,16 +27,6 @@ Global
 		{AA6EF707-96D0-44CB-8EF3-19DC00DF05DC}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{AA6EF707-96D0-44CB-8EF3-19DC00DF05DC}.Release|Win32.ActiveCfg = Release|Win32
 		{AA6EF707-96D0-44CB-8EF3-19DC00DF05DC}.Release|Win32.Build.0 = Release|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Debug|Win32.ActiveCfg = Debug|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Debug|Win32.Build.0 = Debug|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Release|Any CPU.ActiveCfg = Release|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Release|Win32.ActiveCfg = Release|Win32
-		{13CC2C4D-8C73-4CE5-B4DB-82CC5496FB46}.Release|Win32.Build.0 = Release|Win32
 		{68A801CE-4E70-410C-9E9A-13C2AC9737FA}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{68A801CE-4E70-410C-9E9A-13C2AC9737FA}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{68A801CE-4E70-410C-9E9A-13C2AC9737FA}.Debug|Mixed Platforms.Build.0 = Debug|Win32
