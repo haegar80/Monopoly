@@ -18,7 +18,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 	void wheelEvent(QWheelEvent *event);
 private:
-	struct hit 
+	struct Hit 
 	{
 		int id_count, zmin, zmax, id;
 	};
@@ -34,8 +34,10 @@ private:
 	double m_pressedXPos;
 	double m_pressedYPos;
 	bool m_mousePressed;
+	bool m_turnMap;
 
 	void processMovingMap(double p_xPosDelta, double p_yPosDelta);
+	void processTurningMap(double p_xPosDelta, double p_yPosDelta);
 	void processFindingObject(double p_xPos, double p_yPos);
 
 	double getTranslateX(double p_xPosDelta);

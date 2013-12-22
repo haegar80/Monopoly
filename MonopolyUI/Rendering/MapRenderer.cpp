@@ -2,6 +2,7 @@
 #include "MapRenderer.h"
 #include <GL/gl.h>
 #include <sstream>
+#include <cmath>
 
 MapRenderer::MapRenderer(GameMap& p_gameMap) :
 	m_gameMap(p_gameMap),
@@ -18,6 +19,7 @@ void MapRenderer::render(QGLWidget* p_widget)
 	if(!m_selectionMode) {
 		renderMap();
 	}
+	renderTurnMapArc();
 
 	// Read Places from Gamemap
 	std::vector<Place>& places = m_gameMap.getPlaces();
@@ -81,6 +83,35 @@ void MapRenderer::renderMap()
 	glEnd();
 }
 
+void MapRenderer::renderTurnMapArc()
+{
+	double size = static_cast<double>(m_gameMap.getSize());
+	float startAngle = 0.0;
+	float endAngle = 359.0;
+	float deltaAngle = 1.0;
+	float radius = 30.0;
+	const double PI = 3.14159265;
+	double rate = PI / 180;  // PI / 180 in Radiant entspricht 1° 
+
+	glColor3ub(0, 0, 0);
+	glLineWidth(3.0);
+	glBegin(GL_LINE_STRIP);
+	float angleRadiant = 0.0;
+	for(float angle = startAngle; angle < endAngle; angle += deltaAngle) {
+		angleRadiant = angle * rate;
+		glVertex2f(size + radius * cosf(angleRadiant), 0 + radius * sinf(angleRadiant));
+	}
+	glEnd();
+
+    float arrowStartX = size + radius * cosf(angleRadiant) - 10;
+	float arrowStartY = 0 + radius * sinf(angleRadiant) - 10;
+	glBegin(GL_LINE_STRIP);
+	glVertex2f(arrowStartX, arrowStartY);
+	glVertex2f(arrowStartX + 10, arrowStartY + 10);
+	glVertex2f(arrowStartX + 20, arrowStartY);
+	glEnd();
+}
+
 void MapRenderer::renderPlaceColor(Place& p_place)
 {
 	Color color = p_place.getColor();
@@ -93,6 +124,7 @@ void MapRenderer::renderPlaceColor(Place& p_place)
 	int posY = p_place.getPosY();
 	int posYColor = posY;
 
+	glLineWidth(1.0);
 	glDisable(GL_CULL_FACE);
 	glLoadName(p_place.getSelectionNumber());
 	glBegin(GL_POLYGON);

@@ -17,7 +17,8 @@ GLWidget::GLWidget(MapRenderer& p_mapRenderer, QWidget* p_parent) : QGLWidget(p_
 	m_cameraAngleZ(0.0),
 	m_pressedXPos(0.0),
 	m_pressedYPos(0.0),
-	m_mousePressed(false)
+	m_mousePressed(false),
+	m_turnMap(false)
 {
     setMouseTracking(true);
 }
@@ -92,8 +93,18 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 	    double deltaY = event->y() - m_pressedYPos;
 		processMovingMap(deltaX, deltaY);
 	}
-	else if(m_mousePressed && Qt::LeftButton == event->buttons()) {
-		processFindingObject(event->x(), m_height - event->y());
+	else { 
+		if(Qt::LeftButton == event->buttons()) {
+			processFindingObject(event->x(), m_height - event->y());
+			if(m_mousePressed) {
+				if(m_turnMap) {
+					double deltaX = event->x() - m_pressedXPos;
+	                double deltaY = event->y() - m_pressedYPos;
+					processTurningMap(deltaX, deltaY);
+					m_turnMap = false;
+		        }
+		    }
+		}
 	}
 }
 
@@ -125,8 +136,13 @@ void GLWidget::processMovingMap(double p_xPosDelta, double p_yPosDelta)
 	m_translateX += getTranslateX(p_xPosDelta);
 	m_translateY += getTranslateY(p_yPosDelta);
 
-	m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta);
 	updateGL();
+}
+
+void GLWidget::processTurningMap(double p_xPosDelta, double p_yPosDelta)
+{
+   m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta); 
+   updateGL();
 }
 
 void GLWidget::processFindingObject(double p_xPos, double p_yPos)
@@ -167,8 +183,12 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 
     std::vector<int> selectedObjects; 
 	if(numberOfSelectedObjects > 0) {
-		hit* pHitArray = reinterpret_cast<hit*>(selectionBuffer);
+		Hit* pHitArray = reinterpret_cast<Hit*>(selectionBuffer);
 	    for(int i = 0; i < numberOfSelectedObjects; i++) {
+			if(0 == pHitArray[i].id) {
+				m_turnMap = true;
+				return;
+			}
 			selectedObjects.push_back(pHitArray[i].id);
 		}
 	}

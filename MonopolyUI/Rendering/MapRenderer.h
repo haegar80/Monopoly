@@ -21,6 +21,7 @@ private:
 	void renderMap();
 	void renderPlaceColor(Place& p_place);
 	void renderPlaceText(Place& p_place, QGLWidget* p_widget);
+	void renderTurnMapArc();
 };
 
 #endif // MapRenderer_H
