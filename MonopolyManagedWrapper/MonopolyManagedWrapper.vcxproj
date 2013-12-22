@@ -98,8 +98,8 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Monopoly\Monopoly.vcxproj">
-      <Project>{aa6ef707-96d0-44cb-8ef3-19dc00df05dc}</Project>
+    <ProjectReference Include="..\MonopolyUI\MonopolyUI.vcxproj">
+      <Project>{f6117f60-8670-405f-9ba1-21013cb8effe}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

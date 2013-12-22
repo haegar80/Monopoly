@@ -1,7 +1,7 @@
 #ifndef MonopolyManagedWrapper_H
 #define MonopolyManagedWrapper_H
 
-#include "../Monopoly/Monopoly.h"
+#include "../MonopolyUI/MonopolyUI.h"
 
 using namespace System;
 
