@@ -15,9 +15,10 @@ GLWidget::GLWidget(MapRenderer& p_mapRenderer, QWidget* p_parent) : QGLWidget(p_
 	m_cameraAngleX(-30.0),
 	m_cameraAngleY(0.0),
 	m_cameraAngleZ(0.0),
-	m_pressedXPos(0.0),
-	m_pressedYPos(0.0),
+	m_lastXPos(0.0),
+	m_lastYPos(0.0),
 	m_mousePressed(false),
+	m_moveMap(false),
 	m_turnMap(false)
 {
     setMouseTracking(true);
@@ -61,8 +62,11 @@ void GLWidget::paintGL()
 	QMatrix4x4 viewMatrix;
 	viewMatrix.rotate(m_cameraAngleY, 0.0, 1.0, 0.0);
 	viewMatrix.rotate(m_cameraAngleX, 1.0, 0.0, 0.0);
+
+	viewMatrix.translate(-m_translateX, -m_translateY, 0.0);
 	viewMatrix.rotate(m_cameraAngleZ, 0.0, 0.0, 1.0);
-	
+	viewMatrix.translate(m_translateX, m_translateY, 0.0);
+
 	QMatrix4x4 modelViewMatrix = modelMatrix * viewMatrix;
 
     glLoadMatrixd(modelViewMatrix.data());
@@ -76,36 +80,45 @@ void GLWidget::paintGL()
 
 void GLWidget::mousePressEvent(QMouseEvent *event) 
 {
-	m_pressedXPos = event->x();
-	m_pressedYPos = event->y();
 	m_mousePressed = true;
+	if(Qt::RightButton == event->buttons()) {
+		m_moveMap = true;
+	}
+	processFindingObject(event->x(), m_height - event->y());
+	m_lastXPos = event->x();
+	m_lastYPos = event->y();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) 
 {
 	m_mousePressed = false;
+	m_moveMap = false;
+	m_turnMap = false;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) 
 {
-	if(m_mousePressed && Qt::RightButton == event->buttons()) {
-		double deltaX = event->x() - m_pressedXPos;
-	    double deltaY = event->y() - m_pressedYPos;
-		processMovingMap(deltaX, deltaY);
+	int currentXPos = event->x();
+	int currentYPos = event->y();
+	if(!m_mousePressed) {
+		return;
 	}
-	else { 
-		if(Qt::LeftButton == event->buttons()) {
-			processFindingObject(event->x(), m_height - event->y());
-			if(m_mousePressed) {
-				if(m_turnMap) {
-					double deltaX = event->x() - m_pressedXPos;
-	                double deltaY = event->y() - m_pressedYPos;
-					processTurningMap(deltaX, deltaY);
-					m_turnMap = false;
-		        }
-		    }
+	if(Qt::LeftButton == event->buttons()) {
+		processFindingObject(currentXPos, m_height - currentYPos);
+	}
+	else if(Qt::RightButton == event->buttons()) {
+		double deltaX = currentXPos - m_lastXPos;
+		double deltaY = currentYPos - m_lastYPos;
+	
+	    if(m_moveMap && m_turnMap) {
+			processTurningMap(deltaX, deltaY);
+		}
+		else if(m_moveMap && !m_turnMap) {
+			processMovingMap(deltaX, deltaY);
 		}
 	}
+    m_lastXPos = currentXPos;
+	m_lastYPos = currentYPos;
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event) 
@@ -133,16 +146,23 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
 
 void GLWidget::processMovingMap(double p_xPosDelta, double p_yPosDelta) 
 {
-	m_translateX += getTranslateX(p_xPosDelta);
-	m_translateY += getTranslateY(p_yPosDelta);
+	m_translateX += p_xPosDelta;
+	m_translateY -= p_yPosDelta;
 
 	updateGL();
 }
 
 void GLWidget::processTurningMap(double p_xPosDelta, double p_yPosDelta)
 {
-   m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta); 
-   updateGL();
+	m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta);
+	printf("Camera angle Z: %f", m_cameraAngleZ);
+	if(m_cameraAngleZ > 360.0) {
+		m_cameraAngleZ -= 360.0;
+	}
+	if(m_cameraAngleZ < 0) {
+		m_cameraAngleZ += 360.0;
+	}
+	updateGL();
 }
 
 void GLWidget::processFindingObject(double p_xPos, double p_yPos)
@@ -166,7 +186,7 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 	glLoadIdentity();
  
  	// Restrict the draw to an area around the cursor
-	gluPickMatrix(p_xPos, p_yPos, 1.0, 1.0, view);
+	gluPickMatrix(p_xPos, p_yPos, 10.0, 10.0, view);
     gluPerspective(30.0, 1.0, 1.0, 10000.0); 
 
 	// Redraw with restricted view area
@@ -185,7 +205,7 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 	if(numberOfSelectedObjects > 0) {
 		Hit* pHitArray = reinterpret_cast<Hit*>(selectionBuffer);
 	    for(int i = 0; i < numberOfSelectedObjects; i++) {
-			if(0 == pHitArray[i].id) {
+			if(m_mapRenderer.getTurnMapId() == pHitArray[i].id && m_moveMap) {
 				m_turnMap = true;
 				return;
 			}
@@ -195,42 +215,57 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 	else {
 		selectedObjects.push_back(0);
 	}
+
+	if(m_moveMap) {
+		return;
+	}
 	m_mapRenderer.selectObjects(selectedObjects);
 	updateGL();
 }
 
-double GLWidget::getTranslateX(double p_xPosDelta)
-{
-	double translateX = 0.0;
-	if(p_xPosDelta > 0) {
-		translateX += 5.0;
-	}
-	else {
-		translateX -= 5.0;
-	}
-	return translateX;
-}
-
-double GLWidget::getTranslateY(double p_yPosDelta)
-{
-	double translateY = 0.0;
-	if(p_yPosDelta > 0) {
-		translateY -= 5.0;
-	}
-	else {
-		translateY += 5.0;
-	}
-	return translateY;
-}
-
 double GLWidget::getAngleZChange(double p_xPosDelta, double p_yPosDelta) 
 {
-	double angleZChange = 0.0;
-	if(p_xPosDelta < -10.0 && p_yPosDelta > 10.0) { 
-		angleZChange -= 1.0; 
+	if(!validateAngleZChange(p_xPosDelta, p_yPosDelta)) {
+		return 0.0;
 	}
-	else if (p_xPosDelta > 10.0 && p_yPosDelta < -10.0) {
-		angleZChange += 1.0;
+	
+	bool turnClockWise = true;
+	if(m_cameraAngleZ >= 0 && m_cameraAngleZ < 90.0) {
+		if(p_yPosDelta < 0.0) {
+			turnClockWise = false;
+		}
 	}
-	return angleZChange;
+	if(m_cameraAngleZ >= 90.0 && m_cameraAngleZ < 180.0) {
+		if(p_xPosDelta < 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 180.0 && m_cameraAngleZ < 270.0) {
+		if(p_yPosDelta > 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 270.0 && m_cameraAngleZ <= 360.0) {
+		if(p_xPosDelta > 0.0) {
+			turnClockWise = false;
+		}
+	}
+
+	double deltaAngleZ = 0.0;
+	if(turnClockWise) {
+		deltaAngleZ -= 2.0;
+	}
+	else {
+		deltaAngleZ += 2.0;
+	}
+	return deltaAngleZ;
+}
+
+bool GLWidget::validateAngleZChange(double p_xPosDelta, double p_yPosDelta)
+{
+	if((p_xPosDelta <= 1.9 && p_xPosDelta >= -1.9) && (p_yPosDelta <= 1.9 && p_yPosDelta >= -1.9)) {
+		return false;
+	}
+	
+	return true;
 }

@@ -31,18 +31,18 @@ private:
 	double m_cameraAngleX;
 	double m_cameraAngleY;
 	double m_cameraAngleZ;
-	double m_pressedXPos;
-	double m_pressedYPos;
+	double m_lastXPos;
+	double m_lastYPos;
 	bool m_mousePressed;
+	bool m_moveMap;
 	bool m_turnMap;
 
 	void processMovingMap(double p_xPosDelta, double p_yPosDelta);
 	void processTurningMap(double p_xPosDelta, double p_yPosDelta);
 	void processFindingObject(double p_xPos, double p_yPos);
 
-	double getTranslateX(double p_xPosDelta);
-	double getTranslateY(double p_yPosDelta);
 	double getAngleZChange(double p_xPosDelta, double p_yPosDelta);
+	bool validateAngleZChange(double p_xPosDelta, double p_yPosDelta);
 };
 
 #endif // GLWidget_H

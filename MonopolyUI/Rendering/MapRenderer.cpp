@@ -5,6 +5,7 @@
 #include <cmath>
 
 MapRenderer::MapRenderer(GameMap& p_gameMap) :
+	mc_turnMapId(50),
 	m_gameMap(p_gameMap),
 	m_selectionMode(false)
 {
@@ -89,12 +90,12 @@ void MapRenderer::renderTurnMapArc()
 	float startAngle = 0.0;
 	float endAngle = 359.0;
 	float deltaAngle = 1.0;
-	float radius = 30.0;
+	float radius = 10.0;
 	const double PI = 3.14159265;
 	double rate = PI / 180;  // PI / 180 in Radiant entspricht 1° 
-
+	glLoadName(mc_turnMapId);
 	glColor3ub(0, 0, 0);
-	glLineWidth(3.0);
+	glLineWidth(2.0);
 	glBegin(GL_LINE_STRIP);
 	float angleRadiant = 0.0;
 	for(float angle = startAngle; angle < endAngle; angle += deltaAngle) {
@@ -103,12 +104,22 @@ void MapRenderer::renderTurnMapArc()
 	}
 	glEnd();
 
-    float arrowStartX = size + radius * cosf(angleRadiant) - 10;
-	float arrowStartY = 0 + radius * sinf(angleRadiant) - 10;
-	glBegin(GL_LINE_STRIP);
-	glVertex2f(arrowStartX, arrowStartY);
-	glVertex2f(arrowStartX + 10, arrowStartY + 10);
-	glVertex2f(arrowStartX + 20, arrowStartY);
+	float lineAngle1 = 0.0;
+	angleRadiant = lineAngle1 * rate;
+	float crossStartX = size + radius * cosf(angleRadiant);
+	float crossStartY = radius * sinf(angleRadiant);
+	glBegin(GL_LINES);
+	glVertex2f(crossStartX, crossStartY);
+	glVertex2f(crossStartX - 2 * radius, crossStartY);
+	glEnd();
+
+    float lineAngle2 = 90.0;
+	angleRadiant = lineAngle2 * rate;
+	crossStartX = size + radius * cosf(angleRadiant);
+	crossStartY = radius * sinf(angleRadiant);
+	glBegin(GL_LINES);
+	glVertex2f(crossStartX, crossStartY);
+	glVertex2f(crossStartX, crossStartY - 2 * radius);
 	glEnd();
 }
 

@@ -14,7 +14,9 @@ public:
 	void render(QGLWidget* p_widget);
 	void setSelectionMode();
 	void selectObjects(std::vector<int>& p_selectedObjects);
+	uint getTurnMapId() const {return mc_turnMapId; }
 private:
+	const uint mc_turnMapId;
 	GameMap& m_gameMap;
 	bool m_selectionMode;
 
