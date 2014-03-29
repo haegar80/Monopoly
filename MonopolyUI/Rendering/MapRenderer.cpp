@@ -17,6 +17,11 @@ MapRenderer::~MapRenderer()
 
 void MapRenderer::render(QGLWidget* p_widget) 
 {
+	glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	if(!m_selectionMode) {
 		renderMap();
 	}
@@ -41,46 +46,46 @@ void MapRenderer::renderMap()
 	// front
 	glColor3ub(150, 200, 150);
 	glBegin(GL_POLYGON);
-	glVertex3d(size, 0.0, -2.0);
-	glVertex3d(size, size, -2.0);
-	glVertex3d(0.0, size, -2.0);
-	glVertex3d(0.0, 0.0, -2.0);
+	glVertex3d(size, 0.0, -10.0);
+	glVertex3d(size, size, -10.0);
+	glVertex3d(0.0, size, -10.0);
+	glVertex3d(0.0, 0.0, -10.0);
 	glEnd();
 
 	// top
 	glColor3ub(0, 0, 255);
 	glBegin(GL_POLYGON);
-	glVertex3d(size, size, -2.0);
-	glVertex3d(size, size, -200.0);
-	glVertex3d(0, size, -200.0);
-	glVertex3d(0, size, -2.0);
+	glVertex3d(size, size, -10.0);
+	glVertex3d(size, size, -100.0);
+	glVertex3d(0, size, -100.0);
+	glVertex3d(0, size, -10.0);
 	glEnd();
 
 	// bottom
 	glColor3ub(0, 255, 0);
 	glBegin(GL_POLYGON);
-	glVertex3d(0.0, 0.0, -2.0);
-	glVertex3d(0.0, 0.0, -200.0);
-	glVertex3d(size, 0.0, -200.0);
-	glVertex3d(size, 0.0, -2.0);
+	glVertex3d(0.0, 0.0, -10.0);
+	glVertex3d(0.0, 0.0, -100.0);
+	glVertex3d(size, 0.0, -100.0);
+	glVertex3d(size, 0.0, -10.0);
 	glEnd();
 
 	// right
 	glColor3ub(255, 255, 0);
 	glBegin(GL_POLYGON);
-	glVertex3d(size, 0.0, -2.0);
-	glVertex3d(size, 0.0, -200.0);
-	glVertex3d(size, size, -200.0);
-	glVertex3d(size, size, -2.0);
+	glVertex3d(size, 0.0, -10.0);
+	glVertex3d(size, 0.0, -100.0);
+	glVertex3d(size, size, -100.0);
+	glVertex3d(size, size, -10.0);
 	glEnd();
 
 	// left
 	glColor3ub(255, 0, 0);
 	glBegin(GL_POLYGON);
-	glVertex3d(0.0, size, -2.0);
-	glVertex3d(0.0, size, -200.0);
-	glVertex3d(0.0, 0.0, -200.0);
-	glVertex3d(0.0, 0.0, -2.0);
+	glVertex3d(0.0, size, -10.0);
+	glVertex3d(0.0, size, -100.0);
+	glVertex3d(0.0, 0.0, -100.0);
+	glVertex3d(0.0, 0.0, -10.0);
 	glEnd();
 }
 
