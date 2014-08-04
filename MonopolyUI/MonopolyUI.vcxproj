@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="GameMap\GameMap.h" />
     <ClInclude Include="GameMap\Place.h" />
+    <ClInclude Include="UI\PlaceDetails.h" />
     <ClInclude Include="Rendering\MapRenderer.h" />
     <ClInclude Include="MonopolyUI.h" />
     <ClInclude Include="Resource.h" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="GameMap\GameMap.cpp" />
     <ClCompile Include="GameMap\Place.cpp" />
+    <ClCompile Include="UI\PlaceDetails.cpp" />
     <ClCompile Include="Rendering\MapRenderer.cpp" />
     <ClCompile Include="MonopolyUI.cpp" />
     <ClCompile Include="stdafx.cpp">

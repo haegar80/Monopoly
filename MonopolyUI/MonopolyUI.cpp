@@ -5,6 +5,7 @@
 #include "MonopolyUI.h"
 #include "UI/MainWindow.h"
 #include "UI/GLWidget.h"
+#include "UI/PlaceDetails.h"
 #include "GameMap/GameMap.h"
 #include "Rendering/MapRenderer.h"
 
@@ -35,10 +36,12 @@ void Monopoly::DoSomething()
 	GameMap map(cSize, cNumberOfPlaces);
 
 	MapRenderer mapRenderer(map);
+	
+	PlaceDetails placeDetailsWidget(map);
 
 	MainWindow mainWindow;
 	mainWindow.SetupUi();
-	GLWidget mapWidget(mapRenderer, mainWindow.GetMapWidget());
+	GLWidget mapWidget(mapRenderer, placeDetailsWidget, mainWindow.GetMapWidget());
 	mapWidget.setFixedWidth(cSize);
 	mapWidget.setFixedHeight(cSize);
 

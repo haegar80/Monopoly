@@ -5,11 +5,12 @@
 #include "GLWidget.h"
 #include <gl/GLU.h>
 
-GLWidget::GLWidget(MapRenderer& p_mapRenderer, QWidget* p_parent) : QGLWidget(p_parent),
+GLWidget::GLWidget(MapRenderer& p_mapRenderer, PlaceDetails& p_placeDetails, QWidget* p_parent) : QGLWidget(p_parent),
 	m_mapRenderer(p_mapRenderer),
+	m_placeDetails(p_placeDetails),
 	m_width(0.0),
 	m_height(0.0),
-	m_currentZoom(-2100.0),
+	m_currentZoom(-2500.0),
 	m_translateX(-500.0),
 	m_translateY(-500.0),
 	m_cameraAngleX(-30.0),
@@ -46,10 +47,11 @@ void GLWidget::resizeGL(int w, int h)
 	// Projektionsmatrix
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(30.0, 1.0, 1.0, 10000.0);
+	gluPerspective(30.0, m_width / m_height, 1.0, 10000.0);
 
 	// ModelView matrix
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void GLWidget::paintGL()
@@ -62,20 +64,16 @@ void GLWidget::paintGL()
 	QMatrix4x4 viewMatrix;
 	viewMatrix.rotate(m_cameraAngleY, 0.0, 1.0, 0.0);
 	viewMatrix.rotate(m_cameraAngleX, 1.0, 0.0, 0.0);
-
-	viewMatrix.translate(-m_translateX, -m_translateY, 0.0);
 	viewMatrix.rotate(m_cameraAngleZ, 0.0, 0.0, 1.0);
-	viewMatrix.translate(m_translateX, m_translateY, 0.0);
 
 	QMatrix4x4 modelViewMatrix = modelMatrix * viewMatrix;
 
     glLoadMatrixd(modelViewMatrix.data());
 
-	QGLWidget::qglClearColor(QColor(255, 255, 255));
+	QGLWidget::qglClearColor(QColor(100, 100, 100));
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_mapRenderer.render(this);
-	glFlush();
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) 
@@ -155,6 +153,7 @@ void GLWidget::processMovingMap(double p_xPosDelta, double p_yPosDelta)
 void GLWidget::processTurningMap(double p_xPosDelta, double p_yPosDelta)
 {
 	m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta);
+
 	printf("Camera angle Z: %f", m_cameraAngleZ);
 	if(m_cameraAngleZ > 360.0) {
 		m_cameraAngleZ -= 360.0;
@@ -221,6 +220,13 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 	}
 	m_mapRenderer.selectObjects(selectedObjects);
 	updateGL();
+
+	showPlaceDetailsWidget();
+}
+
+void GLWidget::showPlaceDetailsWidget()
+{
+	m_placeDetails.showNormal();
 }
 
 double GLWidget::getAngleZChange(double p_xPosDelta, double p_yPosDelta) 
@@ -253,17 +259,17 @@ double GLWidget::getAngleZChange(double p_xPosDelta, double p_yPosDelta)
 
 	double deltaAngleZ = 0.0;
 	if(turnClockWise) {
-		deltaAngleZ -= 2.0;
+		deltaAngleZ -= 1.0;
 	}
 	else {
-		deltaAngleZ += 2.0;
+		deltaAngleZ += 1.0;
 	}
 	return deltaAngleZ;
 }
 
 bool GLWidget::validateAngleZChange(double p_xPosDelta, double p_yPosDelta)
 {
-	if((p_xPosDelta <= 1.9 && p_xPosDelta >= -1.9) && (p_yPosDelta <= 1.9 && p_yPosDelta >= -1.9)) {
+	if((p_xPosDelta <= 0.9 && p_xPosDelta >= -0.9) && (p_yPosDelta <= 0.9 && p_yPosDelta >= -0.9)) {
 		return false;
 	}
 	

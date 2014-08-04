@@ -2,11 +2,12 @@
 #define GLWidget_H
 #include <QtOpenGL/QGLWidget>
 #include "../Rendering/MapRenderer.h"
+#include "PlaceDetails.h"
 
 class GLWidget : public QGLWidget
 {
 public:
-	GLWidget(MapRenderer& p_mapRenderer, QWidget* p_parent = NULL);
+	GLWidget(MapRenderer& p_mapRenderer, PlaceDetails& p_placeDetails, QWidget* p_parent = NULL);
 	virtual ~GLWidget();
 protected:
 	void initializeGL();
@@ -23,6 +24,7 @@ private:
 		int id_count, zmin, zmax, id;
 	};
 	MapRenderer& m_mapRenderer;
+	PlaceDetails& m_placeDetails;
 	double m_width;
 	double m_height;
 	double m_currentZoom;
@@ -40,6 +42,7 @@ private:
 	void processMovingMap(double p_xPosDelta, double p_yPosDelta);
 	void processTurningMap(double p_xPosDelta, double p_yPosDelta);
 	void processFindingObject(double p_xPos, double p_yPos);
+	void showPlaceDetailsWidget();
 
 	double getAngleZChange(double p_xPosDelta, double p_yPosDelta);
 	bool validateAngleZChange(double p_xPosDelta, double p_yPosDelta);

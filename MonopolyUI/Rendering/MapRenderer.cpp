@@ -44,7 +44,7 @@ void MapRenderer::renderMap()
 	double size = static_cast<double>(m_gameMap.getSize());
 	
 	// front
-	glColor3ub(150, 200, 150);
+	glColor3ub(0, 120, 0);
 	glBegin(GL_POLYGON);
 	glVertex3d(size, 0.0, -10.0);
 	glVertex3d(size, size, -10.0);
@@ -52,8 +52,8 @@ void MapRenderer::renderMap()
 	glVertex3d(0.0, 0.0, -10.0);
 	glEnd();
 
+	glColor3ub(0, 50, 0);
 	// top
-	glColor3ub(0, 0, 255);
 	glBegin(GL_POLYGON);
 	glVertex3d(size, size, -10.0);
 	glVertex3d(size, size, -100.0);
@@ -62,7 +62,6 @@ void MapRenderer::renderMap()
 	glEnd();
 
 	// bottom
-	glColor3ub(0, 255, 0);
 	glBegin(GL_POLYGON);
 	glVertex3d(0.0, 0.0, -10.0);
 	glVertex3d(0.0, 0.0, -100.0);
@@ -71,7 +70,6 @@ void MapRenderer::renderMap()
 	glEnd();
 
 	// right
-	glColor3ub(255, 255, 0);
 	glBegin(GL_POLYGON);
 	glVertex3d(size, 0.0, -10.0);
 	glVertex3d(size, 0.0, -100.0);
@@ -80,7 +78,6 @@ void MapRenderer::renderMap()
 	glEnd();
 
 	// left
-	glColor3ub(255, 0, 0);
 	glBegin(GL_POLYGON);
 	glVertex3d(0.0, size, -10.0);
 	glVertex3d(0.0, size, -100.0);

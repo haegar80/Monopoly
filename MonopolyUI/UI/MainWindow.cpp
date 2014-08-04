@@ -18,9 +18,12 @@ void MainWindow::SetupUi()
     this->resize(1024, 1024);
     m_Centralwidget = new QWidget(this);
     m_Centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+	m_Centralwidget->setStyleSheet("background:rgb(50,50,50)");
     m_Widget = new QWidget(m_Centralwidget);
     m_Widget->setObjectName(QString::fromUtf8("widget"));
     m_Widget->setGeometry(QRect(146, 12, 1024, 1024));
+    m_Widget->setAutoFillBackground(true);
+
     m_QuitButton = new QPushButton(m_Centralwidget);
     m_QuitButton->setObjectName(QString::fromUtf8("quitButton"));
     m_QuitButton->setGeometry(QRect(20, 1000, 75, 23));
