@@ -31,9 +31,7 @@ GLWidget::~GLWidget(void)
 
 void GLWidget::initializeGL() 
 {
-	QGLWidget::setAutoBufferSwap(true);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
+	QGLWidget::setAutoBufferSwap(false);
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -52,10 +50,14 @@ void GLWidget::resizeGL(int w, int h)
 	// ModelView matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	QGLWidget::qglClearColor(QColor(100, 100, 100));
 }
 
 void GLWidget::paintGL()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Translate object coordinates to model coordinates
 	QMatrix4x4 modelMatrix;
 	modelMatrix.translate(m_translateX, m_translateY, m_currentZoom);
@@ -70,10 +72,8 @@ void GLWidget::paintGL()
 
     glLoadMatrixd(modelViewMatrix.data());
 
-	QGLWidget::qglClearColor(QColor(100, 100, 100));
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	m_mapRenderer.render(this);
+	QGLWidget::swapBuffers();
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) 
@@ -154,7 +154,6 @@ void GLWidget::processTurningMap(double p_xPosDelta, double p_yPosDelta)
 {
 	m_cameraAngleZ += getAngleZChange(p_xPosDelta, p_yPosDelta);
 
-	printf("Camera angle Z: %f", m_cameraAngleZ);
 	if(m_cameraAngleZ > 360.0) {
 		m_cameraAngleZ -= 360.0;
 	}
@@ -236,23 +235,43 @@ double GLWidget::getAngleZChange(double p_xPosDelta, double p_yPosDelta)
 	}
 	
 	bool turnClockWise = true;
-	if(m_cameraAngleZ >= 0 && m_cameraAngleZ < 90.0) {
+	if(m_cameraAngleZ >= 0 && m_cameraAngleZ < 45.0) {
 		if(p_yPosDelta < 0.0) {
 			turnClockWise = false;
 		}
 	}
-	if(m_cameraAngleZ >= 90.0 && m_cameraAngleZ < 180.0) {
+	if(m_cameraAngleZ >= 45 && m_cameraAngleZ < 90.0) {
 		if(p_xPosDelta < 0.0) {
 			turnClockWise = false;
 		}
 	}
-	if(m_cameraAngleZ >= 180.0 && m_cameraAngleZ < 270.0) {
+	if(m_cameraAngleZ >= 90.0 && m_cameraAngleZ < 135.0) {
+		if(p_xPosDelta < 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 135.0 && m_cameraAngleZ < 180.0) {
 		if(p_yPosDelta > 0.0) {
 			turnClockWise = false;
 		}
 	}
-	if(m_cameraAngleZ >= 270.0 && m_cameraAngleZ <= 360.0) {
+	if(m_cameraAngleZ >= 180.0 && m_cameraAngleZ < 225.0) {
+		if(p_yPosDelta > 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 225.0 && m_cameraAngleZ < 270.0) {
 		if(p_xPosDelta > 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 270.0 && m_cameraAngleZ < 315.0) {
+		if(p_xPosDelta > 0.0) {
+			turnClockWise = false;
+		}
+	}
+	if(m_cameraAngleZ >= 315.0) {
+		if(p_yPosDelta < 0.0) {
 			turnClockWise = false;
 		}
 	}

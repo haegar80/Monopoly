@@ -21,6 +21,10 @@ void MapRenderer::render(QGLWidget* p_widget)
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	/*glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);*/
 
 	if(!m_selectionMode) {
 		renderMap();
@@ -30,8 +34,10 @@ void MapRenderer::render(QGLWidget* p_widget)
 	// Read Places from Gamemap
 	std::vector<Place>& places = m_gameMap.getPlaces();
 	for(uint i=0; i < places.size(); i++) {
+		/*glDisable(GL_CULL_FACE);*/
 		renderPlaceColor(places[i]);
-		
+		/*glEnable(GL_CULL_FACE);*/
+
 		if(!m_selectionMode) {
 			renderPlaceText(places[i], p_widget);
 		}
@@ -137,8 +143,6 @@ void MapRenderer::renderPlaceColor(Place& p_place)
 	int posY = p_place.getPosY();
 	int posYColor = posY;
 
-	glLineWidth(1.0);
-	glDisable(GL_CULL_FACE);
 	glLoadName(p_place.getSelectionNumber());
 	glBegin(GL_POLYGON);
 	glVertex3i(posX, posYColor - heightColor, -2);
@@ -146,8 +150,8 @@ void MapRenderer::renderPlaceColor(Place& p_place)
 	glVertex3i(posX + width, posYColor, -2);
 	glVertex3i(posX + width, posYColor - heightColor, -2);
 	glEnd();
-	glEnable(GL_CULL_FACE);
 
+	glLineWidth(1.0);
 	if(p_place.isSelected()) {
 		glColor3ub(255, 0, 0);
 	}
