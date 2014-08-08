@@ -220,12 +220,16 @@ void GLWidget::processFindingObject(double p_xPos, double p_yPos)
 	m_mapRenderer.selectObjects(selectedObjects);
 	updateGL();
 
-	showPlaceDetailsWidget();
+	int selectionNumber = selectedObjects.front();
+	if(0 != selectionNumber && m_mapRenderer.getTurnMapId() != selectionNumber) {
+		showPlaceDetailsWidget(selectionNumber);
+	}
 }
 
-void GLWidget::showPlaceDetailsWidget()
+void GLWidget::showPlaceDetailsWidget(int p_selectionNumber)
 {
-	m_placeDetails.showNormal();
+	m_placeDetails.retranslateUi();
+	m_placeDetails.showDialog(p_selectionNumber);
 }
 
 double GLWidget::getAngleZChange(double p_xPosDelta, double p_yPosDelta) 

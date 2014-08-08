@@ -23,6 +23,7 @@ void MonopolyManagedWrapper::DoSomething()
 	registerEvent();
 	// m_monopolyUI->FireEvent();
 	m_monopolyUI->DoSomething();
+
 }
 
 void MonopolyManagedWrapper::registerEvent()

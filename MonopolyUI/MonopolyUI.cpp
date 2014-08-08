@@ -38,10 +38,11 @@ void Monopoly::DoSomething()
 	MapRenderer mapRenderer(map);
 	
 	PlaceDetails placeDetailsWidget(map);
+	placeDetailsWidget.setupUi();
 
 	MainWindow mainWindow;
-	mainWindow.SetupUi();
-	GLWidget mapWidget(mapRenderer, placeDetailsWidget, mainWindow.GetMapWidget());
+	mainWindow.setupUi();
+	GLWidget mapWidget(mapRenderer, placeDetailsWidget, mainWindow.getMapWidget());
 	mapWidget.setFixedWidth(cSize);
 	mapWidget.setFixedHeight(cSize);
 

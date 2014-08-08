@@ -17,6 +17,16 @@ std::vector<Place>& GameMap::getPlaces()
 	return m_places;
 }
 
+Place& GameMap::getPlaceBySelectionNumber(int p_selectionNumber)
+{
+	for(UINT16 placeIndex = 0; placeIndex < m_places.size(); placeIndex++) {
+		if(p_selectionNumber == m_places[placeIndex].getSelectionNumber()) {
+			return m_places[placeIndex];
+		}
+	}
+	return m_places.front();
+}
+
 int GameMap::getSize()
 {
 	return m_size;

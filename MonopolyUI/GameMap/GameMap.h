@@ -11,6 +11,7 @@ public:
 	~GameMap();
 
 	std::vector<Place>& getPlaces();
+	Place& getPlaceBySelectionNumber(int p_selectionNumber);
 	int getSize();
 
 private:

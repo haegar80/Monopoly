@@ -19,16 +19,16 @@ public:
 	MainWindow();
 	virtual ~MainWindow();
 
-	void SetupUi();
-	void RetranslateUi();
-	QWidget* GetMapWidget();
+	void setupUi();
+	void retranslateUi();
+	QWidget* getMapWidget();
 
 private:
-    QWidget* m_Centralwidget;
-    QWidget* m_Widget;
-    QPushButton* m_QuitButton;
-    QMenuBar* m_Menubar;
-    QStatusBar* m_Statusbar;
+    QWidget* m_centralwidget;
+    QWidget* m_widget;
+    QPushButton* m_quitButton;
+    QMenuBar* m_menubar;
+    QStatusBar* m_statusbar;
 };
 
 QT_END_NAMESPACE

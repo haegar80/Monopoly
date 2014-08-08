@@ -42,7 +42,7 @@ private:
 	void processMovingMap(double p_xPosDelta, double p_yPosDelta);
 	void processTurningMap(double p_xPosDelta, double p_yPosDelta);
 	void processFindingObject(double p_xPos, double p_yPos);
-	void showPlaceDetailsWidget();
+	void showPlaceDetailsWidget(int p_selectionNumber);
 
 	double getAngleZChange(double p_xPosDelta, double p_yPosDelta);
 	bool validateAngleZChange(double p_xPosDelta, double p_yPosDelta);

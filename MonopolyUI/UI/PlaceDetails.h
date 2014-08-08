@@ -16,14 +16,15 @@ QT_BEGIN_NAMESPACE
 class PlaceDetails : public QDialog
 {
 public:
-	PlaceDetails(const GameMap& pc_gameMap);
+	PlaceDetails(GameMap& p_gameMap);
 	virtual ~PlaceDetails();
 
-	void SetupUi();
-	void RetranslateUi();
+	void setupUi();
+	void retranslateUi();
+	void showDialog(uint p_selectionNumber);
 
 private:
-	const GameMap& m_gameMap;
+	GameMap& m_gameMap;
     QLabel* m_placeLabel;
     QTextBrowser* m_placeDetailsText;
 };
