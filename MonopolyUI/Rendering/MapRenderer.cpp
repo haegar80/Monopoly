@@ -21,9 +21,7 @@ void MapRenderer::render(QGLWidget* p_widget)
 	glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glDisable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
-	//glDepthMask(GL_TRUE);
 
 	// Textures setup
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -42,9 +40,6 @@ void MapRenderer::render(QGLWidget* p_widget)
 		renderPlaceContent(places[i]);
 		glDisable(GL_TEXTURE_2D);
 		renderPlaceBorder(places[i]);
-		if(!m_selectionMode) {
-			renderPlaceText(places[i], p_widget);
-		}
 	}
 
 	m_selectionMode = false;
@@ -138,9 +133,6 @@ void MapRenderer::renderTurnMapArc()
 
 void MapRenderer::renderPlaceContent(Place& p_place)
 {
-	/*Color color = p_place.getColor();
-	glColor3ub(color.redValue, color.greenValue, color.blueValue);*/
-
 	// integer precise is enough
 	int height = p_place.getHeight();
 	int width = p_place.getWidth();
@@ -154,9 +146,11 @@ void MapRenderer::renderPlaceContent(Place& p_place)
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	//Original image
-	QImage placePictureOrig;
+	QImage placePictureOrig(width, height, QImage::Format_ARGB32);
 	std::string fileNameString = "Images/" + p_place.getCity() + "_" + p_place.getName() + ".png";
 	QString filename(fileNameString.c_str());
 	if(!placePictureOrig.load(filename)) {
@@ -210,24 +204,8 @@ void MapRenderer::renderPlaceBorder(Place& p_place)
 	glVertex3i(posX + width, posY, -2);
 	glVertex3i(posX + width, posY - height, -2);
 	glEnd();
-}
 
-void MapRenderer::renderPlaceText(Place& p_place, QGLWidget* p_widget)
-{
-	std::string name = p_place.getCity() + " " + p_place.getName();
-	int height = p_place.getHeight();
-	int width = p_place.getWidth();
-	int posX = p_place.getPosX();
-	int posY = p_place.getPosY();
-	int posYText = posY - (height / 2);
-	p_widget->renderText(posX, posYText, -2, QString::fromUtf8(p_place.getCity().c_str()));
-	posYText += 10;
-	p_widget->renderText(posX, posYText, -2, QString::fromUtf8(p_place.getName().c_str()));
-	posYText += 20;
-	int price = p_place.getPrice();
-	std::stringstream priceString;
-    priceString << price;
-	p_widget->renderText(posX, posYText, -2, QString::fromUtf8(priceString.str().c_str()));
+	glDisable(GL_BLEND);
 }
 
 void MapRenderer::renderBackgroundPolygon(int p_width, int p_height)
