@@ -8,6 +8,7 @@ Place::Place(std::string p_name, std::string p_city, int p_width, int p_height) 
 	m_city(p_city),
 	m_width(p_width),
 	m_height(p_height),
+	m_mapDirection(MapDirection_InitialValue),
 	m_isSelected(false),
 	m_selectionNumber(++ms_latestSelectionNumber)
 {
@@ -74,6 +75,16 @@ int Place::getHeight()
 int Place::getWidth()
 {
 	return m_width;
+}
+
+void Place::setMapDirection(EMapDirection p_mapDirection)
+{
+	m_mapDirection = p_mapDirection;
+}
+
+EMapDirection Place::getMapDirection()
+{
+	return m_mapDirection;
 }
 
 int Place::getSelectionNumber()

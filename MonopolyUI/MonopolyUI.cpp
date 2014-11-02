@@ -32,7 +32,7 @@ void Monopoly::DoSomething()
 	QApplication app(argc, argv);
 
 	const int cSize = 1000;
-	const int cNumberOfPlaces = 40;
+	const int cNumberOfPlaces = 36;
 	GameMap map(cSize, cNumberOfPlaces);
 
 	MapRenderer mapRenderer(map);

@@ -9,6 +9,14 @@ struct Color {
 	int blueValue;
 };
 
+enum EMapDirection {
+	MapDirection_InitialValue = 0,
+    MapDirection_Bottom = 1,
+	MapDirection_Left = 2,
+	MapDirection_Top = 3,
+	MapDirection_Right = 4
+};
+
 class Place
 {
 public:
@@ -31,6 +39,9 @@ public:
 	int getHeight();
 	int getWidth();
 
+	void setMapDirection(EMapDirection p_mapDirection);
+	EMapDirection getMapDirection();
+
 	int getSelectionNumber();
 
 	void setSelected(int p_selectionNumber);
@@ -44,6 +55,7 @@ private:
 	int m_positionX;
 	int m_positionY;
 	Color m_color;
+	EMapDirection m_mapDirection;
 	int m_price;
 	int m_selectionNumber;
 	bool m_isSelected;

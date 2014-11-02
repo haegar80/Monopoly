@@ -3,6 +3,7 @@
 #include <GL/gl.h>
 #include <sstream>
 #include <cmath>
+#include <qmessagebox.h>
 
 MapRenderer::MapRenderer(GameMap& p_gameMap) :
 	mc_turnMapId(50),
@@ -19,29 +20,33 @@ void MapRenderer::render(QGLWidget* p_widget)
 {
 	glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	/*glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);*/
+	//glDepthMask(GL_TRUE);
 
+	// Textures setup
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	
 	if(!m_selectionMode) {
+    	renderBackgroundPolygon(p_widget->width(), p_widget->height());
 		renderMap();
 	}
+
 	renderTurnMapArc();
 
 	// Read Places from Gamemap
 	std::vector<Place>& places = m_gameMap.getPlaces();
 	for(uint i=0; i < places.size(); i++) {
-		/*glDisable(GL_CULL_FACE);*/
-		renderPlaceColor(places[i]);
-		/*glEnable(GL_CULL_FACE);*/
-
+		glEnable(GL_TEXTURE_2D);
+		renderPlaceContent(places[i]);
+		glDisable(GL_TEXTURE_2D);
+		renderPlaceBorder(places[i]);
 		if(!m_selectionMode) {
 			renderPlaceText(places[i], p_widget);
 		}
 	}
+
 	m_selectionMode = false;
 }
 
@@ -131,33 +136,74 @@ void MapRenderer::renderTurnMapArc()
 	glEnd();
 }
 
-void MapRenderer::renderPlaceColor(Place& p_place)
+void MapRenderer::renderPlaceContent(Place& p_place)
 {
-	Color color = p_place.getColor();
-	glColor3ub(color.redValue, color.greenValue, color.blueValue);
+	/*Color color = p_place.getColor();
+	glColor3ub(color.redValue, color.greenValue, color.blueValue);*/
+
 	// integer precise is enough
 	int height = p_place.getHeight();
-	int heightColor = height / 4;
 	int width = p_place.getWidth();
 	int posX = p_place.getPosX();
 	int posY = p_place.getPosY();
-	int posYColor = posY;
 
 	glLoadName(p_place.getSelectionNumber());
-	glBegin(GL_POLYGON);
-	glVertex3i(posX, posYColor - heightColor, -2);
-	glVertex3i(posX, posYColor, -2);
-	glVertex3i(posX + width, posYColor, -2);
-	glVertex3i(posX + width, posYColor - heightColor, -2);
-	glEnd();
+
+	uint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	//Original image
+	QImage placePictureOrig;
+	std::string fileNameString = "Images/" + p_place.getCity() + "_" + p_place.getName() + ".png";
+	QString filename(fileNameString.c_str());
+	if(!placePictureOrig.load(filename)) {
+		return;
+	}
+
+	QImage placePicture;
+	placePicture = QGLWidget::convertToGLFormat(placePictureOrig);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, placePicture.width(), placePicture.height(),
+		0, GL_RGBA, GL_UNSIGNED_BYTE, placePicture.bits() );
+
+	switch(p_place.getMapDirection()) {
+	case MapDirection_Bottom:
+		renderPlaceBottom(height, width, posX, posY);
+		break;
+	case MapDirection_Left:
+		renderPlaceLeft(height, width, posX, posY);
+		break;
+	case MapDirection_Top:
+		renderPlaceTop(height, width, posX, posY);
+		break;
+	case MapDirection_Right:
+		renderPlaceRight(height, width, posX, posY);
+		break;
+	}
+}
+
+void MapRenderer::renderPlaceBorder(Place& p_place)
+{
+	// integer precise is enough
+	int height = p_place.getHeight();
+	int width = p_place.getWidth();
+	int posX = p_place.getPosX();
+	int posY = p_place.getPosY();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glLineWidth(1.0);
 	if(p_place.isSelected()) {
 		glColor3ub(255, 0, 0);
 	}
 	else {
-		glColor3ub(40, 40, 40);
+		glColor3ub(0, 0, 0);
 	}
+	
 	glBegin(GL_LINE_LOOP);
 	glVertex3i(posX, posY - height, -2);
 	glVertex3i(posX, posY, -2);
@@ -184,6 +230,18 @@ void MapRenderer::renderPlaceText(Place& p_place, QGLWidget* p_widget)
 	p_widget->renderText(posX, posYText, -2, QString::fromUtf8(priceString.str().c_str()));
 }
 
+void MapRenderer::renderBackgroundPolygon(int p_width, int p_height)
+{
+	glColor3ub(0, 0, 0);
+
+	glBegin(GL_POLYGON);
+	glVertex3i(0, 0, -200);
+	glVertex3i(0, p_height, -200);
+	glVertex3i(p_width, p_height, -200);
+	glVertex3i(p_width, 0, -200);
+	glEnd();
+}
+
 void MapRenderer::setSelectionMode()
 {
 	m_selectionMode = true;
@@ -197,4 +255,67 @@ void MapRenderer::selectObjects(std::vector<int>& p_selectedObjects)
 			places[placeIndex].setSelected(p_selectedObjects[selectedObjectIndex]);
 		}
 	}
+}
+
+void MapRenderer::renderPlaceBottom(int p_height, int p_width, int p_posX, int p_posY)
+{
+	glPushMatrix();
+
+	int pixelOffset = 1;
+
+	glBegin(GL_POLYGON);
+	glTexCoord2i(0, 0);
+	glVertex3i(p_posX + pixelOffset, p_posY - p_height + pixelOffset, -2);
+	glTexCoord2i(0, 1);
+	glVertex3i(p_posX + pixelOffset, p_posY - pixelOffset, -2);
+	glTexCoord2i(1, 1);
+	glVertex3i(p_posX + p_width - pixelOffset, p_posY - pixelOffset, -2);
+	glTexCoord2i(1, 0);
+	glVertex3i(p_posX + p_width - pixelOffset, p_posY - p_height + pixelOffset, -2);
+
+	glEnd();
+
+	glPopMatrix();
+}
+
+void MapRenderer::renderPlaceLeft(int p_height, int p_width, int p_posX, int p_posY)
+{
+	int widthColor = p_width / 4;
+	int posXColor = p_posX + p_width - widthColor;
+
+	glBegin(GL_POLYGON);
+	int pixelOffset = 1;
+	glVertex3i(posXColor + pixelOffset, p_posY - pixelOffset, -2);
+	glVertex3i(posXColor + pixelOffset, p_posY - p_height + pixelOffset, -2);
+	glVertex3i(posXColor + widthColor - pixelOffset, p_posY - p_height + pixelOffset, -2);
+	glVertex3i(posXColor + widthColor - pixelOffset, p_posY - pixelOffset, -2);
+	glEnd();
+}
+
+void MapRenderer::renderPlaceTop(int p_height, int p_width, int p_posX, int p_posY)
+{
+	int heightColor = p_height / 4;
+	int posYColor = p_posY;
+
+	glBegin(GL_POLYGON);
+	int pixelOffset = 1;
+	glVertex3i(p_posX + pixelOffset, posYColor - heightColor + pixelOffset, -2);
+	glVertex3i(p_posX + pixelOffset, posYColor - pixelOffset, -2);
+	glVertex3i(p_posX + p_width - pixelOffset, posYColor - pixelOffset, -2);
+	glVertex3i(p_posX + p_width - pixelOffset, posYColor - heightColor + pixelOffset, -2);
+	glEnd();
+}
+
+void MapRenderer::renderPlaceRight(int p_height, int p_width, int p_posX, int p_posY)
+{
+	int heightColor = p_height / 4;
+	int posYColor = p_posY;
+
+	glBegin(GL_POLYGON);
+	int pixelOffset = 1;
+	glVertex3i(p_posX + pixelOffset, posYColor - heightColor + pixelOffset, -2);
+	glVertex3i(p_posX + pixelOffset, posYColor - pixelOffset, -2);
+	glVertex3i(p_posX + p_width - pixelOffset, posYColor - pixelOffset, -2);
+	glVertex3i(p_posX + p_width - pixelOffset, posYColor - heightColor + pixelOffset, -2);
+	glEnd();
 }

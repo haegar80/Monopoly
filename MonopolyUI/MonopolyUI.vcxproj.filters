@@ -100,6 +100,9 @@
     <Image Include="small.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Images\Chur_Kornplatz.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="QTDLLs\QtCore4.dll">
