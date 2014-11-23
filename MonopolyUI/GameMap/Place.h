@@ -1,6 +1,7 @@
 #ifndef Place_H
 #define Place_H
 
+#include <qimage.h>
 #include <string>
 
 struct Color {
@@ -47,6 +48,9 @@ public:
 	void setSelected(int p_selectionNumber);
 	bool isSelected();
 
+	void loadImage();
+	QImage getImage();
+
 private:
 	std::string m_name;
 	std::string m_city;
@@ -59,6 +63,7 @@ private:
 	int m_price;
 	int m_selectionNumber;
 	bool m_isSelected;
+	QImage m_image;
 
 	static int ms_latestSelectionNumber;
 };

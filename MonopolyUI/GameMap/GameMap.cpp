@@ -42,52 +42,94 @@ void GameMap::initializePlaces()
 	int width = static_cast<int>(m_size / (((m_numberOfPlaces / 4) + cornerPlaces)));
 	int height = width * 2;
 
-	// Chur
+	// Bottom
 	Place placeChur("Kornplatz", "Chur", width, height);
-	placeChur.setPrice(1200);
+	placeChur.setPrice(60);
 	placeChur.setPosition(m_size - 3 * width, height);
 	placeChur.setColor(50, 0, 255);
 	placeChur.setMapDirection(MapDirection_Bottom);
+	placeChur.loadImage();
 	m_places.push_back(placeChur);
 
-	// Schaffhausen
 	Place placeSchaffhausen("Vordergasse", "Schaffhausen", width, height);
-	placeSchaffhausen.setPrice(1200);
+	placeSchaffhausen.setPrice(60);
 	placeSchaffhausen.setPosition(m_size - 5 * width, height);
 	placeSchaffhausen.setColor(50, 0, 255);
 	placeSchaffhausen.setMapDirection(MapDirection_Bottom);
+	placeSchaffhausen.loadImage();
 	m_places.push_back(placeSchaffhausen);
 
-	// Aarau
 	Place placeAarau("Rathausplatz", "Aarau", width, height);
-	placeAarau.setPrice(2000);
+	placeAarau.setPrice(100);
 	placeAarau.setPosition(m_size - 8 * width, height);
 	placeAarau.setColor(50, 200, 255);
 	placeAarau.setMapDirection(MapDirection_Bottom);
+	placeAarau.loadImage();
 	m_places.push_back(placeAarau);
 
-	// Neuenburg
 	Place placeNeuenburg("Place Purry", "Neuenburg", width, height);
-	placeNeuenburg.setPrice(2000);
+	placeNeuenburg.setPrice(100);
 	placeNeuenburg.setPosition(m_size - 10 * width, height);
 	placeNeuenburg.setColor(50, 200, 255);
 	placeNeuenburg.setMapDirection(MapDirection_Bottom);
+	placeNeuenburg.loadImage();
 	m_places.push_back(placeNeuenburg);
 
-	// Thun
 	Place placeThun("Hauptgasse", "Thun", width, height);
-	placeThun.setPrice(2400);
+	placeThun.setPrice(120);
 	placeThun.setPosition(m_size - 11 * width, height);
 	placeThun.setColor(50, 200, 255);
 	placeThun.setMapDirection(MapDirection_Bottom);
+	placeThun.loadImage();
 	m_places.push_back(placeThun);
 
+	// Left
 	// Width and height are exchanged on left and right side
-	// Basel
 	Place placeBasel("Steinen-Vorstadt", "Basel", height, width);
-	placeBasel.setPrice(2800);
+	placeBasel.setPrice(140);
 	placeBasel.setPosition(m_size - 13 * width, m_size - 10 * width);
 	placeBasel.setColor(150, 0, 100);
 	placeBasel.setMapDirection(MapDirection_Left);
+	placeBasel.loadImage();
 	m_places.push_back(placeBasel);
+
+	Place placeSolothurn("Hauptgasse", "Solothurn", height, width);
+	placeSolothurn.setPrice(140);
+	placeSolothurn.setPosition(m_size - 13 * width, m_size - 8 * width);
+	placeSolothurn.setColor(150, 0, 100);
+	placeSolothurn.setMapDirection(MapDirection_Left);
+	placeSolothurn.loadImage();
+	m_places.push_back(placeSolothurn);
+
+	Place placeLugano("Via Nassa", "Lugano", height, width);
+	placeLugano.setPrice(160);
+	placeLugano.setPosition(m_size - 13 * width, m_size - 7 * width);
+	placeLugano.setColor(150, 0, 100);
+	placeLugano.setMapDirection(MapDirection_Left);
+	placeLugano.loadImage();
+	m_places.push_back(placeLugano);
+
+	Place placeBiel("Nidaugasse", "Biel", height, width);
+	placeBiel.setPrice(180);
+	placeBiel.setPosition(m_size - 13 * width, m_size - 5 * width);
+	placeBiel.setColor(150, 0, 100);
+	placeBiel.setMapDirection(MapDirection_Left);
+	placeBiel.loadImage();
+	m_places.push_back(placeBiel);
+
+	Place placeFreiburg("Bahnhofstrasse", "Freiburg", height, width);
+	placeFreiburg.setPrice(180);
+	placeFreiburg.setPosition(m_size - 13 * width, m_size - 3 * width);
+	placeFreiburg.setColor(150, 0, 100);
+	placeFreiburg.setMapDirection(MapDirection_Left);
+	placeFreiburg.loadImage();
+	m_places.push_back(placeFreiburg);
+
+	Place placeLaChauxDeFonds("Av. L.-Robert", "La Chaux-de-Fonds", height, width);
+	placeLaChauxDeFonds.setPrice(200);
+	placeLaChauxDeFonds.setPosition(m_size - 13 * width, m_size - 2 * width);
+	placeLaChauxDeFonds.setColor(150, 0, 100);
+	placeLaChauxDeFonds.setMapDirection(MapDirection_Left);
+	placeLaChauxDeFonds.loadImage();
+	m_places.push_back(placeLaChauxDeFonds);
 }

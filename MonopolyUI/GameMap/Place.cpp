@@ -10,7 +10,8 @@ Place::Place(std::string p_name, std::string p_city, int p_width, int p_height) 
 	m_height(p_height),
 	m_mapDirection(MapDirection_InitialValue),
 	m_isSelected(false),
-	m_selectionNumber(++ms_latestSelectionNumber)
+	m_selectionNumber(++ms_latestSelectionNumber),
+	m_image(m_width, m_height, QImage::Format_ARGB32)
 {
 }
 
@@ -105,4 +106,18 @@ void Place::setSelected(int p_selectionNumber)
 bool Place::isSelected()
 {
 	return m_isSelected;
+}
+
+void Place::loadImage()
+{
+	std::string fileNameString = "Images/" + m_city + "_" + m_name + ".png";
+	QString filename(fileNameString.c_str());
+	if(!m_image.load(filename)) {
+		return;
+	}
+}
+
+QImage Place::getImage()
+{
+	return m_image;
 }

@@ -131,9 +131,6 @@ copy "Images\*" "$(SolutionDir)$(Configuration)\Images\"</Command>
     <ClCompile Include="UI\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Images\Chur_Kornplatz.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </Image>
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -146,19 +146,10 @@ void MapRenderer::renderPlaceContent(Place& p_place)
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	//Original image
-	QImage placePictureOrig(width, height, QImage::Format_ARGB32);
-	std::string fileNameString = "Images/" + p_place.getCity() + "_" + p_place.getName() + ".png";
-	QString filename(fileNameString.c_str());
-	if(!placePictureOrig.load(filename)) {
-		return;
-	}
-
-	QImage placePicture;
-	placePicture = QGLWidget::convertToGLFormat(placePictureOrig);
+	QImage placePicture = QGLWidget::convertToGLFormat(p_place.getImage());
 
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, placePicture.width(), placePicture.height(),
 		0, GL_RGBA, GL_UNSIGNED_BYTE, placePicture.bits() );
@@ -250,7 +241,6 @@ void MapRenderer::renderPlaceBottom(int p_height, int p_width, int p_posX, int p
 	glVertex3i(p_posX + p_width - pixelOffset, p_posY - pixelOffset, -2);
 	glTexCoord2i(1, 0);
 	glVertex3i(p_posX + p_width - pixelOffset, p_posY - p_height + pixelOffset, -2);
-
 	glEnd();
 
 	glPopMatrix();
@@ -258,16 +248,22 @@ void MapRenderer::renderPlaceBottom(int p_height, int p_width, int p_posX, int p
 
 void MapRenderer::renderPlaceLeft(int p_height, int p_width, int p_posX, int p_posY)
 {
-	int widthColor = p_width / 4;
-	int posXColor = p_posX + p_width - widthColor;
+	glPushMatrix();
+
+	int pixelOffset = 1;
 
 	glBegin(GL_POLYGON);
-	int pixelOffset = 1;
-	glVertex3i(posXColor + pixelOffset, p_posY - pixelOffset, -2);
-	glVertex3i(posXColor + pixelOffset, p_posY - p_height + pixelOffset, -2);
-	glVertex3i(posXColor + widthColor - pixelOffset, p_posY - p_height + pixelOffset, -2);
-	glVertex3i(posXColor + widthColor - pixelOffset, p_posY - pixelOffset, -2);
+	glTexCoord2i(1, 0);
+	glVertex3i(p_posX + pixelOffset, p_posY - p_height + pixelOffset, -2);
+	glTexCoord2i(0, 0);
+	glVertex3i(p_posX + pixelOffset, p_posY - pixelOffset, -2);
+	glTexCoord2i(0, 1);
+	glVertex3i(p_posX + p_width - pixelOffset, p_posY - pixelOffset, -2);
+	glTexCoord2i(1, 1);
+	glVertex3i(p_posX + p_width - pixelOffset, p_posY - p_height + pixelOffset, -2);
 	glEnd();
+
+	glPopMatrix();
 }
 
 void MapRenderer::renderPlaceTop(int p_height, int p_width, int p_posX, int p_posY)
