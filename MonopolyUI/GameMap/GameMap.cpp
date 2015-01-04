@@ -59,6 +59,22 @@ void GameMap::initializePlaces()
 	placeSchaffhausen.loadImage();
 	m_places.push_back(placeSchaffhausen);
 
+	Place placeEinkommenssteuer("Einkommenssteuer", "", width, height);
+	placeEinkommenssteuer.setPrice(200);
+	placeEinkommenssteuer.setPosition(m_size - 6 * width, height);
+	placeEinkommenssteuer.setColor(255, 255, 255);
+	placeEinkommenssteuer.setMapDirection(MapDirection_Bottom);
+	placeEinkommenssteuer.loadImage();
+	m_places.push_back(placeEinkommenssteuer);
+
+	Place placeVereinigtePrivatbahnen("Privatbahnen", "", width, height);
+	placeVereinigtePrivatbahnen.setPrice(200);
+	placeVereinigtePrivatbahnen.setPosition(m_size - 7 * width, height);
+	placeVereinigtePrivatbahnen.setColor(255, 255, 255);
+	placeVereinigtePrivatbahnen.setMapDirection(MapDirection_Bottom);
+	placeVereinigtePrivatbahnen.loadImage();
+	m_places.push_back(placeVereinigtePrivatbahnen);
+
 	Place placeAarau("Rathausplatz", "Aarau", width, height);
 	placeAarau.setPrice(100);
 	placeAarau.setPosition(m_size - 8 * width, height);
@@ -108,6 +124,14 @@ void GameMap::initializePlaces()
 	placeLugano.setMapDirection(MapDirection_Left);
 	placeLugano.loadImage();
 	m_places.push_back(placeLugano);
+
+	Place placeVereinigteBergbahnen("Bergbahnen", "", height, width);
+	placeVereinigteBergbahnen.setPrice(200);
+	placeVereinigteBergbahnen.setPosition(m_size - 13 * width, m_size - 6 * width);
+	placeVereinigteBergbahnen.setColor(255, 255, 255);
+	placeVereinigteBergbahnen.setMapDirection(MapDirection_Left);
+	placeVereinigteBergbahnen.loadImage();
+	m_places.push_back(placeVereinigteBergbahnen);
 
 	Place placeBiel("Nidaugasse", "Biel", height, width);
 	placeBiel.setPrice(180);

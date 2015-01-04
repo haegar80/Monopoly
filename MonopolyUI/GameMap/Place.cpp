@@ -110,7 +110,13 @@ bool Place::isSelected()
 
 void Place::loadImage()
 {
-	std::string fileNameString = "Images/" + m_city + "_" + m_name + ".png";
+	std::string fileNameString = "Images/";
+	if(m_city.empty()) {
+		fileNameString += m_name + ".png";
+	}
+	else {
+		fileNameString += m_city + "_" + m_name + ".png";
+	}
 	QString filename(fileNameString.c_str());
 	if(!m_image.load(filename)) {
 		return;
