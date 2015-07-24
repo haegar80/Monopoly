@@ -108,6 +108,7 @@ copy "Images\*" "$(SolutionDir)$(Configuration)\Images\"</Command>
   <ItemGroup>
     <ClInclude Include="GameMap\GameMap.h" />
     <ClInclude Include="GameMap\Place.h" />
+    <ClInclude Include="ObjectLoader\ObjLoader.h" />
     <ClInclude Include="UI\PlaceDetails.h" />
     <ClInclude Include="Rendering\MapRenderer.h" />
     <ClInclude Include="MonopolyUI.h" />
@@ -120,6 +121,7 @@ copy "Images\*" "$(SolutionDir)$(Configuration)\Images\"</Command>
   <ItemGroup>
     <ClCompile Include="GameMap\GameMap.cpp" />
     <ClCompile Include="GameMap\Place.cpp" />
+    <ClCompile Include="ObjectLoader\ObjLoader.cpp" />
     <ClCompile Include="UI\PlaceDetails.cpp" />
     <ClCompile Include="Rendering\MapRenderer.cpp" />
     <ClCompile Include="MonopolyUI.cpp" />

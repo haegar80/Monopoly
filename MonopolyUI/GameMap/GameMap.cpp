@@ -19,7 +19,7 @@ std::vector<Place>& GameMap::getPlaces()
 
 Place& GameMap::getPlaceBySelectionNumber(int p_selectionNumber)
 {
-	for(int placeIndex = 0; placeIndex < m_places.size(); placeIndex++) {
+	for(uint placeIndex = 0; placeIndex < m_places.size(); placeIndex++) {
 		if(p_selectionNumber == m_places[placeIndex].getSelectionNumber()) {
 			return m_places[placeIndex];
 		}
