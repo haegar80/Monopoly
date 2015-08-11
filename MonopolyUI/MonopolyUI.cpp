@@ -8,6 +8,7 @@
 #include "UI/PlaceDetails.h"
 #include "GameMap/GameMap.h"
 #include "Rendering/MapRenderer.h"
+#include "ObjectLoader/ObjLoader.h"
 
 BOOL APIENTRY MonopolyUIEntry(HMODULE hModule,
                               DWORD  ul_reason_for_call,
@@ -35,7 +36,11 @@ void Monopoly::DoSomething()
 	const int cNumberOfPlaces = 36;
 	GameMap map(cSize, cNumberOfPlaces);
 
-	MapRenderer mapRenderer(map);
+	ObjLoader objLoader;
+	std::string fileNameTest = "Wavefront/dlamp.obj";
+	objLoader.LoadOBJ(fileNameTest);
+
+	MapRenderer mapRenderer(map, objLoader);
 	
 	PlaceDetails placeDetailsWidget(map);
 	placeDetailsWidget.setupUi();

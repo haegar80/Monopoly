@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "MapRenderer.h"
+#include "../ObjectLoader/ObjLoader.h"
 #include <GL/gl.h>
 #include <sstream>
 #include <cmath>
 #include <qmessagebox.h>
 
-MapRenderer::MapRenderer(GameMap& p_gameMap) :
+MapRenderer::MapRenderer(GameMap& p_gameMap, const ObjLoader& pc_objLoader) :
 	mc_turnMapId(50),
 	m_gameMap(p_gameMap),
+	mc_objLoader(pc_objLoader),
 	m_selectionMode(false)
 {
 }
@@ -291,5 +293,15 @@ void MapRenderer::renderPlaceRight(int p_height, int p_width, int p_posX, int p_
 	glVertex3i(p_posX + pixelOffset, posYColor - pixelOffset, -2);
 	glVertex3i(p_posX + p_width - pixelOffset, posYColor - pixelOffset, -2);
 	glVertex3i(p_posX + p_width - pixelOffset, posYColor - heightColor + pixelOffset, -2);
+	glEnd();
+}
+
+void MapRenderer::renderWavefrontModels()
+{
+	std::vector<ObjVertexCoords> vertices = mc_objLoader.GetVertices();
+	glBegin(GL_POLYGON);
+	for(ulong i = 0; i < vertices.size(); i++) {
+		glVertex3f(vertices.at(i).X, vertices.at(i).Y, vertices.at(i).Z);
+	}
 	glEnd();
 }
