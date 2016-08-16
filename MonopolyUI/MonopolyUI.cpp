@@ -37,7 +37,7 @@ void Monopoly::DoSomething()
 	GameMap map(cSize, cNumberOfPlaces);
 
 	ObjLoader objLoader;
-	std::string fileNameTest = "Wavefront/dlamp.obj";
+	std::string fileNameTest = "Wavefront/building/building.obj";
 	objLoader.LoadOBJ(fileNameTest);
 
 	MapRenderer mapRenderer(map, objLoader);

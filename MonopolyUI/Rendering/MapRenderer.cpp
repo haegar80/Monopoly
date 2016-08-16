@@ -28,6 +28,7 @@ void MapRenderer::render(QGLWidget* p_widget)
 	// Textures setup
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	
+	//renderWavefrontModels();
 	if(!m_selectionMode) {
     	renderBackgroundPolygon(p_widget->width(), p_widget->height());
 		renderMap();
